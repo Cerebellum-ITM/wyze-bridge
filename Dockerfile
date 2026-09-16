@@ -8,7 +8,9 @@ ARG BRIDGE_VERSION=4.5.0
 FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS build
 
 ARG GO2RTC_REPO=https://github.com/Cerebellum-ITM/go2rtc
-ARG GO2RTC_REF=wyze-ptz
+# Pinned so a rebuild always produces the same image. Bumping this commit is
+# what releases a new version of the fork.
+ARG GO2RTC_REF=9d7d40b1c46cfa51365122ec9d29ef5a76c078f3
 ARG TARGETARCH
 
 RUN apk add --no-cache git
@@ -29,6 +31,10 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH="${TARGETARCH}" \
     go build -trimpath -buildvcs=false -o /out/wyze-ptzd ./cmd/wyze-ptzd
 
 FROM idisposablegithub365/wyze-bridge:${BRIDGE_VERSION}
+
+LABEL org.opencontainers.image.source=https://github.com/Cerebellum-ITM/wyze-bridge
+LABEL org.opencontainers.image.description="docker-wyze-bridge with go2rtc built from Cerebellum-ITM/go2rtc"
+LABEL org.opencontainers.image.licenses=AGPL-3.0
 
 COPY --from=build /out/go2rtc /usr/local/bin/go2rtc
 COPY --from=build /out/wyze-ptzd /usr/local/bin/wyze-ptzd

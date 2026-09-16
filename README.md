@@ -57,12 +57,21 @@ mounted volume. Neither is baked into the image.
 `/config/go2rtc.yaml`; the Wyze session comes from the bridge state file in the
 same directory.
 
-## Building a different fork revision
+## Updating the fork
 
-`GO2RTC_REF` accepts a branch or a commit SHA, so a build can be pinned:
+`GO2RTC_REF` is pinned to a commit, so the same Dockerfile always produces the
+same image and a push to the fork does not silently change what ships here.
+
+Releasing new work from the fork is one edit: bump `GO2RTC_REF` in the
+Dockerfile to the new commit and push. That push is what rebuilds and publishes
+the image.
+
+For a throwaway build of some other revision, the `build` workflow takes a
+branch or commit in its `go2rtc_ref` input; leaving it empty uses the pinned
+commit. Locally:
 
 ```sh
-docker build --build-arg GO2RTC_REF=<sha> -t wyze-bridge .
+docker build --build-arg GO2RTC_REF=<branch-or-sha> -t wyze-bridge .
 ```
 
 `BRIDGE_VERSION` selects the upstream base image tag, `4.5.0` by default.

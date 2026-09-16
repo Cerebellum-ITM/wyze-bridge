@@ -8,8 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       go2rtc_ref:
-        description: Branch or commit of the go2rtc fork to build
-        default: wyze-ptz
+        description: Branch or commit of the go2rtc fork to build, empty for the pinned one
 
 permissions:
   contents: read
@@ -38,7 +37,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            GO2RTC_REF=${{ inputs.go2rtc_ref || 'wyze-ptz' }}
+            ${{ inputs.go2rtc_ref && format('GO2RTC_REF={0}', inputs.go2rtc_ref) || '' }}
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
