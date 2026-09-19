@@ -10,7 +10,7 @@ FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS build
 ARG GO2RTC_REPO=https://github.com/Cerebellum-ITM/go2rtc
 # Pinned so a rebuild always produces the same image. Bumping this commit is
 # what releases a new version of the fork.
-ARG GO2RTC_REF=69eea6899a9eb6e7955614278871947bbf8d4bfb
+ARG GO2RTC_REF=8b81639a776110d6e66f08ebe8be9bc1b60f12e4
 ARG TARGETARCH
 
 RUN apk add --no-cache git
